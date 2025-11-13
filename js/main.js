@@ -76,38 +76,12 @@ async function loadPageContent(page = '') {
             page = 'home';
         }
         
-        // Special handling for home page
-        if (page === 'home') {
-            // Check if we already have the home page loaded
-            let pageElement = document.querySelector('.home-page');
-            
-            if (!pageElement) {
-                // Fetch the home page content
-                const response = await fetch('/pages/home/index.html');
-                if (!response.ok) throw new Error('Home page not found');
-                
-                const html = await response.text();
-                contentElement.innerHTML = html;
-                console.log('Home page loaded');
-            } else {
-                // Show the home page and hide others
-                document.querySelectorAll('.page-content > *').forEach(el => {
-                    el.style.display = 'none';
-                });
-                pageElement.style.display = 'block';
-            }
-            return;
-        }
-        
-        // For other pages, fetch the content
+        // For all pages, including home
         console.log('Fetching page:', `/pages/${page}/index.html`);
         const response = await fetch(`/pages/${page}/index.html`);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        if (!response.ok) throw new Error(`Page not found: ${page}`);
         
         const html = await response.text();
-        console.log('Page fetched successfully');
-        
-        // Parse the HTML
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
         
@@ -118,16 +92,29 @@ async function loadPageContent(page = '') {
                          doc.body;
         
         if (pageContent) {
-            // Hide all pages first
-            document.querySelectorAll('.page-content > *').forEach(el => {
-                el.style.display = 'none';
-            });
+            // Clear the content element
+            contentElement.innerHTML = '';
             
-            // Check if we already have this page loaded
-            let pageElement = document.querySelector(`.${page}-page`);
+            // Create a container for this page
+            const pageContainer = document.createElement('div');
+            pageContainer.className = `${page}-page`;
+            pageContainer.innerHTML = pageContent.innerHTML;
             
-            if (!pageElement) {
-                // Create a new container for this page
+            // Add the page content to the DOM
+            contentElement.appendChild(pageContainer);
+            
+            console.log(`${page} page loaded`);
+            
+            // If this is the home page, we need to re-initialize any scripts
+            if (page === 'home') {
+                // Re-initialize any home page specific scripts here
+            }
+            
+            // Scroll to the top of the page
+            window.scrollTo(0, 0);
+        } else {
+            throw new Error('No content found in the page');
+        }
                 pageElement = document.createElement('div');
                 pageElement.className = `${page}-page`;
                 contentElement.appendChild(pageElement);
