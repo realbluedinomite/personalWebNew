@@ -7,6 +7,7 @@ const savedTheme = localStorage.getItem('theme') || 'light';
 document.documentElement.setAttribute('data-theme', savedTheme);
 if (themeSwitch) {
     themeSwitch.checked = savedTheme === 'dark';
+    themeSwitch.addEventListener('change', toggleTheme);
 }
 
 // Theme Toggle
@@ -15,8 +16,9 @@ function toggleTheme() {
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme', newTheme);
-    if (themeSwitch) {
-        themeSwitch.checked = newTheme === 'dark';
+    const themeText = document.getElementById('theme-text');
+    if (themeText) {
+        themeText.textContent = newTheme === 'dark' ? 'Light Mode' : 'Dark Mode';
     }
 }
 
@@ -24,32 +26,52 @@ function toggleTheme() {
 async function navigateToPage(page = '') {
     console.log('Navigating to:', page || 'home');
     
-    // Update URL without page reload
-    const targetPath = page ? `/${page}/` : '/';
-    window.history.pushState({ page }, '', targetPath);
-    
-    // Load the page content
-    await loadPageContent(page);
-    
-    // Update active nav link
+    // Update active nav link immediately for better UX
     updateActiveNavLink(page);
+    
+    try {
+        // Update URL without page reload
+        const targetPath = page ? `/${page}/` : '/';
+        window.history.pushState({ page }, '', targetPath);
+        
+        // Load the page content
+        await loadPageContent(page);
+    } catch (error) {
+        console.error('Navigation error:', error);
+        // Fallback to home page on error
+        if (page !== '') {
+            navigateToPage('');
+        }
+    }
 }
 
 // Update active navigation link
 function updateActiveNavLink(page) {
     // Remove active class from all nav links
-    document.querySelectorAll('.nav-link').forEach(link => {
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
         link.classList.remove('active');
+        // Also remove active class from parent li if it exists
+        if (link.parentElement && link.parentElement.tagName === 'LI') {
+            link.parentElement.classList.remove('active');
+        }
     });
     
-    // Add active class to current nav link
-    const activeLink = document.querySelector(`[data-page="${page}"]`);
+    // Add active class to current nav link and its parent li
+    let activeLink;
+    if (page) {
+        activeLink = document.querySelector(`.nav-link[data-page="${page}"]`);
+    } else {
+        // Home page
+        activeLink = document.querySelector('.nav-link[data-page=""]') || 
+                    document.querySelector('.nav-link[href="/"]');
+    }
+    
     if (activeLink) {
         activeLink.classList.add('active');
-    } else if (!page) {
-        // If no page is specified, highlight the home link
-        const homeLink = document.querySelector('[data-page=""]');
-        if (homeLink) homeLink.classList.add('active');
+        if (activeLink.parentElement && activeLink.parentElement.tagName === 'LI') {
+            activeLink.parentElement.classList.add('active');
+        }
     }
 }
 
@@ -63,7 +85,14 @@ async function loadPageContent(page = '') {
     }
     
     // Show loading state
-    contentElement.innerHTML = '<div class="loading">Loading...</div>';
+    contentElement.innerHTML = `
+        <div class="loading">
+            <div class="spinner"></div>
+            <p>Loading ${page || 'home'} page...</p>
+        </div>`;
+        
+    // Add a small delay to show loading state (for demo purposes)
+    await new Promise(resolve => setTimeout(resolve, 100));
     
     try {
         // Default to home if no page specified
