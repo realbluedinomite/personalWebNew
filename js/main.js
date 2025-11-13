@@ -335,6 +335,325 @@ async function loadPageContent(page) {
     }
 }
 
+// Page content templates
+const pageTemplates = {
+    'about': `
+        <div class="page-content-inner">
+            <h1>About Me</h1>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>Hello! I'm a passionate web developer with expertise in modern web technologies. I love creating beautiful, responsive, and user-friendly websites and applications.</p>
+                    <p>With several years of experience in the industry, I've worked on a variety of projects ranging from small business websites to large-scale web applications.</p>
+                    <div class="skills">
+                        <h3>My Skills</h3>
+                        <div class="skills-grid">
+                            <div class="skill">
+                                <i class="fab fa-html5"></i>
+                                <span>HTML5</span>
+                            </div>
+                            <div class="skill">
+                                <i class="fab fa-css3-alt"></i>
+                                <span>CSS3</span>
+                            </div>
+                            <div class="skill">
+                                <i class="fab fa-js"></i>
+                                <span>JavaScript</span>
+                            </div>
+                            <div class="skill">
+                                <i class="fab fa-react"></i>
+                                <span>React</span>
+                            </div>
+                            <div class="skill">
+                                <i class="fab fa-node-js"></i>
+                                <span>Node.js</span>
+                            </div>
+                            <div class="skill">
+                                <i class="fas fa-database"></i>
+                                <span>SQL/NoSQL</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <img src="/images/profile-placeholder.jpg" alt="Profile" onerror="this.src='https://via.placeholder.com/300x400?text=Profile+Image'">
+                </div>
+            </div>
+        </div>
+    `,
+    'resume': `
+        <div class="page-content-inner">
+            <h1>My Resume</h1>
+            <div class="resume-container">
+                <div class="resume-section">
+                    <h2>Experience</h2>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <h3>Senior Web Developer</h3>
+                            <div class="timeline-date">2020 - Present</div>
+                            <div class="company">Tech Solutions Inc.</div>
+                            <p>Leading a team of developers in building enterprise-level web applications using modern JavaScript frameworks.</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h3>Frontend Developer</h3>
+                            <div class="timeline-date">2018 - 2020</div>
+                            <div class="company">Digital Creations</div>
+                            <p>Developed responsive websites and web applications using React and Vue.js.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="resume-section">
+                    <h2>Education</h2>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <h3>Master of Computer Science</h3>
+                            <div class="timeline-date">2016 - 2018</div>
+                            <div class="company">Tech University</div>
+                            <p>Specialized in Web Technologies and Human-Computer Interaction.</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h3>Bachelor of Science in Computer Science</h3>
+                            <div class="timeline-date">2012 - 2016</div>
+                            <div class="company">State University</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="download-resume">
+                    <a href="#" class="btn"><i class="fas fa-download"></i> Download Full Resume</a>
+                </div>
+            </div>
+        </div>
+    `,
+    'portfolio': `
+        <div class="page-content-inner">
+            <h1>My Portfolio</h1>
+            <div class="portfolio-grid">
+                <div class="portfolio-item">
+                    <div class="portfolio-image">
+                        <img src="https://via.placeholder.com/600x400?text=Project+1" alt="Project 1">
+                        <div class="portfolio-overlay">
+                            <h3>E-commerce Website</h3>
+                            <p>Full-stack e-commerce platform with React and Node.js</p>
+                            <a href="#" class="btn btn-small">View Project</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-image">
+                        <img src="https://via.placeholder.com/600x400?text=Project+2" alt="Project 2">
+                        <div class="portfolio-overlay">
+                            <h3>Task Management App</h3>
+                            <p>Real-time task management application</p>
+                            <a href="#" class="btn btn-small">View Project</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-image">
+                        <img src="https://via.placeholder.com/600x400?text=Project+3" alt="Project 3">
+                        <div class="portfolio-overlay">
+                            <h3>Portfolio Website</h3>
+                            <p>Responsive portfolio website design</p>
+                            <a href="#" class="btn btn-small">View Project</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `,
+    'blog': `
+        <div class="page-content-inner">
+            <h1>Blog</h1>
+            <div class="blog-grid">
+                <article class="blog-card">
+                    <div class="blog-image">
+                        <img src="https://via.placeholder.com/400x250?text=Blog+1" alt="Blog Post 1">
+                    </div>
+                    <div class="blog-content">
+                        <h2>Getting Started with React Hooks</h2>
+                        <div class="blog-meta">
+                            <span class="date"><i class="far fa-calendar"></i> October 15, 2023</span>
+                            <span class="category"><i class="far fa-folder"></i> React</span>
+                        </div>
+                        <p>Learn how to use React Hooks to simplify your functional components and manage state effectively.</p>
+                        <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                <article class="blog-card">
+                    <div class="blog-image">
+                        <img src="https://via.placeholder.com/400x250?text=Blog+2" alt="Blog Post 2">
+                    </div>
+                    <div class="blog-content">
+                        <h2>CSS Grid vs Flexbox</h2>
+                        <div class="blog-meta">
+                            <span class="date"><i class="far fa-calendar"></i> September 28, 2023</span>
+                            <span class="category"><i class="far fa-folder"></i> CSS</span>
+                        </div>
+                        <p>A comprehensive comparison between CSS Grid and Flexbox and when to use each one in your layouts.</p>
+                        <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    `,
+    'projects': `
+        <div class="page-content-inner">
+            <h1>My Projects</h1>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-header">
+                        <i class="fas fa-laptop-code"></i>
+                        <h3>E-commerce Platform</h3>
+                    </div>
+                    <div class="project-body">
+                        <p>A full-featured e-commerce platform built with MERN stack (MongoDB, Express, React, Node.js).</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">React</span>
+                            <span class="tech-tag">Node.js</span>
+                            <span class="tech-tag">MongoDB</span>
+                        </div>
+                    </div>
+                    <div class="project-footer">
+                        <a href="#" class="btn btn-small"><i class="fab fa-github"></i> Code</a>
+                        <a href="#" class="btn btn-small btn-outline"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-header">
+                        <i class="fas fa-mobile-alt"></i>
+                        <h3>Task Management App</h3>
+                    </div>
+                    <div class="project-body">
+                        <p>A real-time task management application with drag-and-drop functionality and team collaboration features.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Vue.js</span>
+                            <span class="tech-tag">Firebase</span>
+                            <span class="tech-tag">Vuex</span>
+                        </div>
+                    </div>
+                    <div class="project-footer">
+                        <a href="#" class="btn btn-small"><i class="fab fa-github"></i> Code</a>
+                        <a href="#" class="btn btn-small btn-outline"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `,
+    'contact': `
+        <div class="page-content-inner">
+            <h1>Get In Touch</h1>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <div class="contact-method">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h3>Email Me</h3>
+                            <p>contact@example.com</p>
+                        </div>
+                    </div>
+                    <div class="contact-method">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h3>Call Me</h3>
+                            <p>+1 (555) 123-4567</p>
+                        </div>
+                    </div>
+                    <div class="contact-method">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h3>Location</h3>
+                            <p>San Francisco, CA</p>
+                        </div>
+                    </div>
+                </div>
+                <form class="contact-form">
+                    <div class="form-group">
+                        <input type="text" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" placeholder="Your Email" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" placeholder="Subject">
+                    </div>
+                    <div class="form-group">
+                        <textarea placeholder="Your Message" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn">Send Message</button>
+                </form>
+            </div>
+        </div>
+    `
+};
+
+// Load page content
+async function loadPageContent(page) {
+    if (!page || page === 'home') {
+        // If home page, just ensure home is highlighted in nav
+        updateActiveNav('home');
+        return;
+    }
+    
+    // Handle terminal page - redirect to the terminal page
+    if (page === 'terminal') {
+        window.location.href = '/pages/terminal.html';
+        return;
+    }
+    
+    // Update URL without page reload
+    if (window.location.hash !== `#${page}`) {
+        window.history.pushState({}, '', `#${page}`);
+    }
+    
+    // Update active nav link
+    updateActiveNav(page);
+    
+    // Check if we have a template for this page
+    if (pageTemplates[page] && pageContent) {
+        pageContent.innerHTML = pageTemplates[page];
+        // Scroll to top
+        window.scrollTo(0, 0);
+    } else {
+        // Fallback for pages without templates
+        pageContent.innerHTML = `
+            <div class="error-message" style="padding: 2rem; text-align: center;">
+                <h2>Page Coming Soon</h2>
+                <p>This page is currently under construction. Please check back later!</p>
+                <a href="#home" class="btn" style="display: inline-block; margin-top: 1rem; padding: 0.5rem 1rem; background: var(--primary-color); color: white; text-decoration: none; border-radius: 4px;">Return to Home</a>
+            </div>
+        `;
+    }
+}
+
+// Update active navigation link
+function updateActiveNav(activePage) {
+    if (navLinks && navLinks.length > 0) {
+        navLinks.forEach(link => {
+            if (link.getAttribute('data-page') === activePage) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
+    }
+}
+
+// Toggle theme
+function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    if (themeSwitch) {
+        themeSwitch.checked = newTheme === 'dark';
+    }
+}
+
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize theme
@@ -342,11 +661,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.documentElement.setAttribute('data-theme', savedTheme);
     if (themeSwitch) {
         themeSwitch.checked = savedTheme === 'dark';
-        themeSwitch.addEventListener('change', (e) => {
-            const theme = e.target.checked ? 'dark' : 'light';
-            document.documentElement.setAttribute('data-theme', theme);
-            localStorage.setItem('theme', theme);
-        });
+        themeSwitch.addEventListener('change', toggleTheme);
     }
     
     // Initialize chatbot if on the main page
