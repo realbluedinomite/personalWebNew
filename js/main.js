@@ -1,10 +1,6 @@
 // DOM Elements
 const themeSwitch = document.getElementById('theme-switch');
 const html = document.documentElement;
-const terminal = document.getElementById('terminal');
-const terminalToggle = document.querySelector('.terminal-toggle');
-const terminalInput = document.querySelector('.command-input');
-const terminalContent = document.querySelector('.terminal-content');
 const chatbot = document.getElementById('chatbot');
 const chatbotToggle = document.getElementById('chatbot-toggle');
 const chatMessages = document.getElementById('chat-messages') || { appendChild: () => {} };
@@ -307,6 +303,12 @@ async function loadPageContent(page) {
         });
     }
     
+    // If already on the home page and loading home, no need to fetch
+    if (page === 'home' && window.location.pathname === '/') {
+        // Just ensure home is highlighted
+        return;
+    }
+    
     // Load the page content
     try {
         const response = await fetch(`/pages/${page}.html`);
@@ -323,10 +325,10 @@ async function loadPageContent(page) {
         console.error('Error loading page:', error);
         if (pageContent) {
             pageContent.innerHTML = `
-                <div class="error-message">
+                <div class="error-message" style="padding: 2rem; text-align: center;">
                     <h2>Page Not Found</h2>
                     <p>The requested page could not be found.</p>
-                    <a href="#home" class="btn">Return to Home</a>
+                    <a href="#home" class="btn" style="display: inline-block; margin-top: 1rem; padding: 0.5rem 1rem; background: var(--primary-color); color: white; text-decoration: none; border-radius: 4px;">Return to Home</a>
                 </div>
             `;
         }
@@ -371,9 +373,11 @@ document.addEventListener('DOMContentLoaded', () => {
         loadPageContent(page);
     });
     
-    // Load initial page
-    const initialPage = window.location.hash.substring(1) || 'home';
-    loadPageContent(initialPage);
+    // Load initial page - only if we're not on the terminal page
+    if (!window.location.pathname.includes('terminal.html')) {
+        const initialPage = window.location.hash.substring(1) || 'home';
+        loadPageContent(initialPage);
+    }
 });
 
 // Navigation
