@@ -23,20 +23,10 @@ function toggleTheme() {
 
 // Navigation
 function navigateToPage(page) {
-    console.log('Navigating to page:', page);
-    
-    // Don't navigate if already on the same page
-    const currentPath = window.location.pathname;
-    const targetPath = page ? `/${page}/` : '/';
-    
-    if (currentPath === targetPath || 
-        (currentPath.endsWith(`${page}/`) && page !== '') || 
-        (page === '' && currentPath === '/')) {
-        console.log('Already on the same page');
-        return;
-    }
+    console.log('Navigating to page:', page || 'home');
     
     // Update URL without page reload
+    const targetPath = page ? `/${page}/` : '/';
     window.history.pushState({ page }, '', targetPath);
     
     // Load the page content
@@ -44,6 +34,9 @@ function navigateToPage(page) {
     
     // Update active nav link
     updateActiveNavLink(page);
+    
+    // Prevent default link behavior
+    return false;
 }
 
 // Update active navigation link
@@ -69,54 +62,65 @@ async function loadPageContent(page = '') {
         return;
     }
     
-    // Hide all page content first
-    document.querySelectorAll('.page-content > *').forEach(el => {
-        el.style.display = 'none';
-    });
+    // Show loading state
+    contentElement.innerHTML = '<div class="loading">Loading...</div>';
 
-    // Handle home page
-    if (!page || page === 'home' || page === '') {
-        const homePage = document.querySelector('.home-page');
-        if (homePage) {
-            homePage.style.display = 'block';
-            return;
-        }
-        // If home page element doesn't exist, load it
-        page = 'home';
-    }
-    
-    // Check if we already have this page loaded
-    let pageElement = document.querySelector(`.${page}-page`);
-    
-    // If page is already loaded, just show it
-    if (pageElement) {
-        console.log('Page already loaded, showing:', page);
-        pageElement.style.display = 'block';
-        return;
-    }
-    
-    // Otherwise, fetch the page content
     try {
+        // Handle home page (special case)
+        if (!page || page === 'home' || page === '') {
+            const homePage = document.querySelector('.home-page');
+            if (homePage) {
+                // Hide all other pages
+                document.querySelectorAll('.page-content > *:not(.home-page)').forEach(el => {
+                    el.style.display = 'none';
+                });
+                homePage.style.display = 'block';
+                return;
+            }
+            // If home page element doesn't exist, load it
+            page = 'home';
+        }
+        
+        // For other pages, fetch the content
         console.log('Fetching page:', `/pages/${page}/index.html`);
         const response = await fetch(`/pages/${page}/index.html`);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         
         const html = await response.text();
         console.log('Page fetched successfully');
+        
+        // Parse the HTML
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
-        const pageContent = doc.querySelector('.page-content') || doc.body;
+        
+        // Try to find the main content
+        let pageContent = doc.querySelector('.page-content') || 
+                         doc.querySelector('main') || 
+                         doc.querySelector('article') || 
+                         doc.body;
         
         if (pageContent) {
-            // Create a new container for this page
-            pageElement = document.createElement('div');
-            pageElement.className = `${page}-page`;
+            // Hide all pages first
+            document.querySelectorAll('.page-content > *').forEach(el => {
+                el.style.display = 'none';
+            });
+            
+            // Check if we already have this page loaded
+            let pageElement = document.querySelector(`.${page}-page`);
+            
+            if (!pageElement) {
+                // Create a new container for this page
+                pageElement = document.createElement('div');
+                pageElement.className = `${page}-page`;
+                contentElement.appendChild(pageElement);
+            }
+            
+            // Update the content
             pageElement.innerHTML = pageContent.innerHTML;
-            contentElement.appendChild(pageElement);
             pageElement.style.display = 'block';
             console.log('Page content loaded:', page);
         } else {
-            throw new Error('No .page-content found in the loaded page');
+            throw new Error('No content found in the loaded page');
         }
     } catch (error) {
         console.error('Error loading page:', error);
@@ -133,19 +137,26 @@ async function loadPageContent(page = '') {
 
 // Initialize the page
 function initPage() {
-    // Set up navigation
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', (e) => {
+    console.log('Initializing page...');
+    
+    // Use event delegation for navigation links
+    document.addEventListener('click', (e) => {
+        // Check if the clicked element or its parent is a nav-link
+        const link = e.target.closest('.nav-link');
+        if (link) {
             e.preventDefault();
             const page = link.getAttribute('data-page') || '';
+            console.log('Nav link clicked, page:', page);
             navigateToPage(page);
-        });
+        }
     });
     
     // Handle browser back/forward
     window.addEventListener('popstate', (e) => {
+        console.log('Popstate event triggered');
         const page = window.location.pathname === '/' ? '' : 
                     window.location.pathname.replace(/^\/([^\/]+).*$/, '$1');
+        console.log('Loading page from popstate:', page || 'home');
         loadPageContent(page);
         updateActiveNavLink(page);
     });
@@ -156,8 +167,15 @@ function initPage() {
     }
     
     // Load initial page
-    const initialPage = window.location.pathname === '/' ? '' : 
-                       window.location.pathname.replace(/^\/([^\/]+).*$/, '$1');
+    let initialPage = window.location.pathname === '/' ? '' : 
+                     window.location.pathname.replace(/^\/([^\/]+).*$/, '$1');
+    
+    // If we're at the root, make sure we show the home page
+    if (window.location.pathname === '/' || !initialPage) {
+        initialPage = '';
+    }
+    
+    console.log('Loading initial page:', initialPage || 'home');
     loadPageContent(initialPage);
     updateActiveNavLink(initialPage);
 }
