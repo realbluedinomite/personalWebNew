@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Personal Website</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="profile-section">
+                <img src="images/profile.jpg" alt="Profile Picture" class="profile-pic">
+                <h2>Your Name</h2>
+                <p>Web Developer</p>
+            </div>
+            <nav class="nav-menu">
+                <ul>
+                    <li><a href="#home" class="nav-link active" data-page="home"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="#about" class="nav-link" data-page="about"><i class="fas fa-user"></i> About</a></li>
+                    <li><a href="#resume" class="nav-link" data-page="resume"><i class="fas fa-file-alt"></i> Resume</a></li>
+                    <li><a href="#portfolio" class="nav-link" data-page="portfolio"><i class="fas fa-briefcase"></i> Portfolio</a></li>
+                    <li><a href="#blog" class="nav-link" data-page="blog"><i class="fas fa-blog"></i> Blog</a></li>
+                    <li><a href="#projects" class="nav-link" data-page="projects"><i class="fas fa-code"></i> Projects</a></li>
+                    <li><a href="#contact" class="nav-link" data-page="contact"><i class="fas fa-envelope"></i> Contact</a></li>
+                </ul>
+            </nav>
+            <div class="theme-toggle">
+                <i class="fas fa-moon"></i>
+                <label class="switch">
+                    <input type="checkbox" id="theme-switch">
+                    <span class="slider round"></span>
+                </label>
+                <i class="fas fa-sun"></i>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div id="terminal-toggle" class="terminal-toggle">
+                <i class="fas fa-terminal"></i>
+            </div>
+            
+            <!-- Terminal -->
+            <div id="terminal" class="terminal">
+                <div class="terminal-header">
+                    <div class="terminal-buttons">
+                        <span class="terminal-btn close"></span>
+                        <span class="terminal-btn minimize"></span>
+                        <span class="terminal-btn maximize"></span>
+                    </div>
+                    <div class="terminal-title">Terminal</div>
+                </div>
+                <div class="terminal-body">
+                    <div class="terminal-content">
+                        <p>Welcome to my personal website! Type 'help' to see available commands.</p>
+                        <div class="terminal-line">
+                            <span class="prompt">visitor@portfolio:~$</span>
+                            <input type="text" class="command-input" autofocus>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chatbot -->
+            <div id="chatbot" class="chatbot">
+                <div class="chatbot-header">
+                    <span>AI Assistant</span>
+                    <button class="chatbot-close">×</button>
+                </div>
+                <div class="chatbot-messages" id="chat-messages">
+                    <div class="message bot">
+                        <p>Hello! I'm your personal AI assistant. How can I help you today?</p>
+                    </div>
+                </div>
+                <div class="chatbot-input">
+                    <input type="text" id="user-input" placeholder="Ask me anything...">
+                    <button id="send-btn"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+            <button id="chatbot-toggle" class="chatbot-toggle">
+                <i class="fas fa-robot"></i>
+            </button>
+
+            <!-- Page Content -->
+            <div id="page-content" class="page-content">
+                <!-- Content will be loaded here dynamically -->
+            </div>
+        </main>
+    </div>
+
+    <script src="js/main.js" type="module"></script>
+</body>
+</html>
