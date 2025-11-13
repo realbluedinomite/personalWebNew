@@ -281,6 +281,58 @@ function sendMessage() {
     }, 1000 + Math.random() * 1000); // Random delay between 1-2 seconds
 }
 
+// Load page content
+async function loadPageContent(page) {
+    if (!page) page = 'home';
+    
+    // Handle terminal page - redirect to the terminal page
+    if (page === 'terminal') {
+        window.location.href = '/pages/terminal.html';
+        return;
+    }
+    
+    // Update URL without page reload
+    if (window.location.hash !== `#${page}`) {
+        window.history.pushState({}, '', `#${page}`);
+    }
+    
+    // Update active nav link
+    if (navLinks && navLinks.length > 0) {
+        navLinks.forEach(link => {
+            if (link.getAttribute('data-page') === page) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
+    }
+    
+    // Load the page content
+    try {
+        const response = await fetch(`/pages/${page}.html`);
+        if (!response.ok) throw new Error('Page not found');
+        const html = await response.text();
+        
+        // Update the page content
+        if (pageContent) {
+            pageContent.innerHTML = html;
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+    } catch (error) {
+        console.error('Error loading page:', error);
+        if (pageContent) {
+            pageContent.innerHTML = `
+                <div class="error-message">
+                    <h2>Page Not Found</h2>
+                    <p>The requested page could not be found.</p>
+                    <a href="#home" class="btn">Return to Home</a>
+                </div>
+            `;
+        }
+    }
+}
+
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize theme
@@ -295,9 +347,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // Initialize components
-    if (typeof initTerminal === 'function') initTerminal();
-    if (typeof initChatbot === 'function') initChatbot();
+    // Initialize chatbot if on the main page
+    if (typeof initChatbot === 'function') {
+        initChatbot();
+    }
     
     // Set up navigation
     if (navLinks && navLinks.length > 0) {
@@ -306,15 +359,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.preventDefault();
                 const page = link.getAttribute('data-page');
                 if (page) {
-                    // Close terminal when navigating
-                    if (terminal) terminal.classList.remove('active');
-                    // Load the page
                     loadPageContent(page);
-                    // Update URL
-                    window.history.pushState({}, '', `#${page}`);
-                    // Update active nav link
-                    navLinks.forEach(navLink => navLink.classList.remove('active'));
-                    link.classList.add('active');
                 }
             });
         });
@@ -324,30 +369,11 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('popstate', () => {
         const page = window.location.hash.substring(1) || 'home';
         loadPageContent(page);
-        // Update active nav link
-        if (navLinks && navLinks.length > 0) {
-            navLinks.forEach(link => {
-                if (link.getAttribute('data-page') === page) {
-                    link.classList.add('active');
-                } else {
-                    link.classList.remove('active');
-                }
-            });
-        }
     });
     
     // Load initial page
     const initialPage = window.location.hash.substring(1) || 'home';
     loadPageContent(initialPage);
-    
-    // Set initial active nav link
-    if (navLinks && navLinks.length > 0) {
-        navLinks.forEach(link => {
-            if (link.getAttribute('data-page') === initialPage) {
-                link.classList.add('active');
-            }
-        });
-    }
 });
 
 // Navigation

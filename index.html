@@ -26,27 +26,9 @@
                         <li><a href="#blog" class="nav-link" data-page="blog"><i class="fas fa-blog"></i> Blog</a></li>
                         <li><a href="#projects" class="nav-link" data-page="projects"><i class="fas fa-code"></i> Projects</a></li>
                         <li><a href="#contact" class="nav-link" data-page="contact"><i class="fas fa-envelope"></i> Contact</a></li>
+                        <li><a href="#terminal" class="nav-link" data-page="terminal"><i class="fas fa-terminal"></i> Terminal</a></li>
                     </ul>
                 </nav>
-            </div>
-
-            <!-- Terminal Section -->
-            <div class="terminal-container">
-                <div class="terminal-header">
-                    <h3>Terminal</h3>
-                    <button class="terminal-toggle" aria-label="Toggle Terminal">
-                        <i class="fas fa-terminal"></i>
-                    </button>
-                </div>
-                <div id="terminal" class="terminal">
-                    <div class="terminal-content">
-                        <div class="terminal-line">Welcome to the terminal! Type 'help' for available commands.</div>
-                    </div>
-                    <div class="terminal-input">
-                        <span class="prompt">$</span>
-                        <input type="text" class="command-input" placeholder="Type 'help' for commands">
-                    </div>
-                </div>
             </div>
         </aside>
 
@@ -54,19 +36,13 @@
         <main class="main-content">
             <!-- Page content will be loaded here -->
             <div id="page-content" class="page-content">
-                <!-- Content will be loaded here dynamically -->
+                <!-- Home content will be loaded here by default -->
             </div>
+            
+            <!-- Chatbot Toggle Button -->
             <button id="chatbot-toggle" class="chatbot-toggle">
                 <i class="fas fa-robot"></i>
             </button>
-                        <p>Welcome to my personal website! Type 'help' to see available commands.</p>
-                        <div class="terminal-line">
-                            <span class="prompt">visitor@portfolio:~$</span>
-                            <input type="text" class="command-input" autofocus>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <!-- Chatbot -->
             <div id="chatbot" class="chatbot">
@@ -83,14 +59,6 @@
                     <input type="text" id="user-input" placeholder="Ask me anything...">
                     <button id="send-btn"><i class="fas fa-paper-plane"></i></button>
                 </div>
-            </div>
-            <button id="chatbot-toggle" class="chatbot-toggle">
-                <i class="fas fa-robot"></i>
-            </button>
-
-            <!-- Page Content -->
-            <div id="page-content" class="page-content">
-                <!-- Content will be loaded here dynamically -->
             </div>
         </main>
     </div>

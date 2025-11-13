@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal - My Personal Website</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .terminal-page {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .terminal-container {
+            margin-top: 2rem;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .terminal-header {
+            background-color: #1a1a1a;
+            color: #f0f0f0;
+            padding: 0.75rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .terminal {
+            background-color: #1e1e1e;
+            color: #f0f0f0;
+            font-family: 'Courier New', monospace;
+            height: 500px;
+            max-height: 70vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .terminal-content {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .terminal-line {
+            margin: 4px 0;
+            word-break: break-word;
+            white-space: pre-wrap;
+        }
+        .terminal-line.input {
+            color: #4CAF50;
+        }
+        .terminal-input {
+            display: flex;
+            padding: 0.75rem 1rem;
+            background: #1a1a1a;
+            border-top: 1px solid #333;
+        }
+        .prompt {
+            color: #4CAF50;
+            margin-right: 0.5rem;
+            font-weight: bold;
+        }
+        .command-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #f0f0f0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            outline: none;
+        }
+        .back-button {
+            display: inline-block;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 1rem;
+        }
+        .back-button i {
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <main class="main-content">
+            <div class="terminal-page">
+                <a href="#home" class="back-button">
+                    <i class="fas fa-arrow-left"></i> Back to Home
+                </a>
+                <h1>Terminal</h1>
+                <p>Use the terminal to navigate the website or get information. Type 'help' for available commands.</p>
+                
+                <div class="terminal-container">
+                    <div class="terminal-header">
+                        <span>Terminal</span>
+                    </div>
+                    <div id="terminal" class="terminal">
+                        <div class="terminal-content">
+                            <div class="terminal-line">Welcome to the terminal! Type 'help' for available commands.</div>
+                        </div>
+                        <div class="terminal-input">
+                            <span class="prompt">$</span>
+                            <input type="text" class="command-input" placeholder="Type 'help' for commands" autofocus>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="/js/terminal.js"></script>
+</body>
+</html>

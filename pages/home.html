@@ -1,0 +1,125 @@
+<div class="home-page">
+    <h1>Welcome to My Personal Website</h1>
+    <p>Hello! I'm a web developer passionate about creating beautiful and functional websites.</p>
+    
+    <div class="features">
+        <div class="feature">
+            <i class="fas fa-code"></i>
+            <h3>Web Development</h3>
+            <p>Building responsive and modern web applications using the latest technologies.</p>
+        </div>
+        
+        <div class="feature">
+            <i class="fas fa-paint-brush"></i>
+            <h3>UI/UX Design</h3>
+            <p>Creating intuitive and engaging user experiences with clean, modern design.</p>
+        </div>
+        
+        <div class="feature">
+            <i class="fas fa-terminal"></i>
+            <h3>Terminal</h3>
+            <p>Try out the <a href="#terminal" class="nav-link" data-page="terminal">terminal</a> to navigate the site or get information.</p>
+        </div>
+    </div>
+    
+    <div class="cta">
+        <h2>Let's Work Together</h2>
+        <p>Have a project in mind? Get in touch with me!</p>
+        <a href="#contact" class="btn" data-page="contact">Contact Me</a>
+    </div>
+</div>
+
+<style>
+.home-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.home-page h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--heading-color);
+}
+
+.home-page p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    color: var(--text-color);
+}
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+}
+
+.feature {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.feature i {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.feature h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--heading-color);
+}
+
+.cta {
+    text-align: center;
+    margin-top: 4rem;
+    padding: 3rem;
+    background: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.cta h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--heading-color);
+}
+
+.cta p {
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+}
+
+.btn {
+    display: inline-block;
+    background: var(--primary-color);
+    color: white;
+    padding: 0.8rem 1.8rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn:hover {
+    background: var(--accent-color);
+    transform: translateY(-2px);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+</style>
