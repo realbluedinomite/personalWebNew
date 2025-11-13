@@ -25,8 +25,10 @@ function toggleTheme() {
 function navigateToPage(page) {
     console.log('Navigating to page:', page || 'home');
     
+    // Handle home page URL
+    const targetPath = (page && page !== 'home') ? `/${page}/` : '/';
+    
     // Update URL without page reload
-    const targetPath = page ? `/${page}/` : '/';
     window.history.pushState({ page }, '', targetPath);
     
     // Load the page content
@@ -34,6 +36,9 @@ function navigateToPage(page) {
     
     // Update active nav link
     updateActiveNavLink(page);
+    
+    // Scroll to top
+    window.scrollTo(0, 0);
     
     // Prevent default link behavior
     return false;
@@ -66,19 +71,32 @@ async function loadPageContent(page = '') {
     contentElement.innerHTML = '<div class="loading">Loading...</div>';
 
     try {
-        // Handle home page (special case)
-        if (!page || page === 'home' || page === '') {
-            const homePage = document.querySelector('.home-page');
-            if (homePage) {
-                // Hide all other pages
-                document.querySelectorAll('.page-content > *:not(.home-page)').forEach(el => {
+        // Set the default page to 'home' if empty
+        if (!page || page === '') {
+            page = 'home';
+        }
+        
+        // Special handling for home page
+        if (page === 'home') {
+            // Check if we already have the home page loaded
+            let pageElement = document.querySelector('.home-page');
+            
+            if (!pageElement) {
+                // Fetch the home page content
+                const response = await fetch('/pages/home/index.html');
+                if (!response.ok) throw new Error('Home page not found');
+                
+                const html = await response.text();
+                contentElement.innerHTML = html;
+                console.log('Home page loaded');
+            } else {
+                // Show the home page and hide others
+                document.querySelectorAll('.page-content > *').forEach(el => {
                     el.style.display = 'none';
                 });
-                homePage.style.display = 'block';
-                return;
+                pageElement.style.display = 'block';
             }
-            // If home page element doesn't exist, load it
-            page = 'home';
+            return;
         }
         
         // For other pages, fetch the content
