@@ -59,20 +59,31 @@ async function loadPageContent(page = '') {
     const contentElement = document.getElementById('page-content');
     if (!contentElement) return;
     
-    // If it's the home page, we already have the content
+    // Hide all page content first
+    document.querySelectorAll('.page-content > *').forEach(el => {
+        el.style.display = 'none';
+    });
+
+    // If it's the home page, show the home content
     if (!page || page === 'home' || page === '') {
         const homePage = document.querySelector('.home-page');
         if (homePage) {
             homePage.style.display = 'block';
-            document.querySelectorAll('.page-content > *:not(.home-page)').forEach(el => {
-                el.style.display = 'none';
-            });
         }
         return;
     }
     
+    // Check if we already have this page loaded
+    let pageElement = document.querySelector(`.${page}-page`);
+    
+    // If page is already loaded, just show it
+    if (pageElement) {
+        pageElement.style.display = 'block';
+        return;
+    }
+    
+    // Otherwise, fetch the page content
     try {
-        // Try to fetch the page content
         const response = await fetch(`/pages/${page}/index.html`);
         if (!response.ok) throw new Error('Page not found');
         
@@ -82,33 +93,22 @@ async function loadPageContent(page = '') {
         const pageContent = doc.querySelector('.page-content');
         
         if (pageContent) {
-            // Hide all current content
-            document.querySelectorAll('.page-content > *').forEach(el => {
-                el.style.display = 'none';
-            });
-            
-            // Add or update the page content
-            let pageElement = document.querySelector(`.${page}-page`);
-            if (!pageElement) {
-                pageElement = document.createElement('div');
-                pageElement.className = `${page}-page`;
-                contentElement.appendChild(pageElement);
-            }
-            
+            // Create a new container for this page
+            pageElement = document.createElement('div');
+            pageElement.className = `${page}-page`;
             pageElement.innerHTML = pageContent.innerHTML;
+            contentElement.appendChild(pageElement);
             pageElement.style.display = 'block';
         }
     } catch (error) {
         console.error('Error loading page:', error);
-        if (contentElement) {
-            contentElement.innerHTML = `
-                <div class="error-message">
-                    <h2>Page Not Found</h2>
-                    <p>The requested page could not be loaded.</p>
-                    <a href="/" class="btn" data-page="">Return to Home</a>
-                </div>
-            `;
-        }
+        contentElement.innerHTML = `
+            <div class="error-message">
+                <h2>Page Not Found</h2>
+                <p>The requested page could not be loaded: ${page}</p>
+                <a href="/" class="btn" data-page="">Return to Home</a>
+            </div>
+        `;
     }
 }
 
