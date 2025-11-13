@@ -23,15 +23,21 @@ function toggleTheme() {
 
 // Navigation
 function navigateToPage(page) {
+    console.log('Navigating to page:', page);
+    
     // Don't navigate if already on the same page
-    if ((window.location.pathname.endsWith(`${page}/`) && page !== '') || 
-        (page === '' && window.location.pathname === '/')) {
+    const currentPath = window.location.pathname;
+    const targetPath = page ? `/${page}/` : '/';
+    
+    if (currentPath === targetPath || 
+        (currentPath.endsWith(`${page}/`) && page !== '') || 
+        (page === '' && currentPath === '/')) {
+        console.log('Already on the same page');
         return;
     }
     
     // Update URL without page reload
-    const newPath = page ? `/${page}/` : '/';
-    window.history.pushState({ page }, '', newPath);
+    window.history.pushState({ page }, '', targetPath);
     
     // Load the page content
     loadPageContent(page);
@@ -56,21 +62,27 @@ function updateActiveNavLink(page) {
 
 // Load page content
 async function loadPageContent(page = '') {
+    console.log('Loading page:', page || 'home');
     const contentElement = document.getElementById('page-content');
-    if (!contentElement) return;
+    if (!contentElement) {
+        console.error('Page content element not found');
+        return;
+    }
     
     // Hide all page content first
     document.querySelectorAll('.page-content > *').forEach(el => {
         el.style.display = 'none';
     });
 
-    // If it's the home page, show the home content
+    // Handle home page
     if (!page || page === 'home' || page === '') {
         const homePage = document.querySelector('.home-page');
         if (homePage) {
             homePage.style.display = 'block';
+            return;
         }
-        return;
+        // If home page element doesn't exist, load it
+        page = 'home';
     }
     
     // Check if we already have this page loaded
@@ -78,19 +90,22 @@ async function loadPageContent(page = '') {
     
     // If page is already loaded, just show it
     if (pageElement) {
+        console.log('Page already loaded, showing:', page);
         pageElement.style.display = 'block';
         return;
     }
     
     // Otherwise, fetch the page content
     try {
+        console.log('Fetching page:', `/pages/${page}/index.html`);
         const response = await fetch(`/pages/${page}/index.html`);
-        if (!response.ok) throw new Error('Page not found');
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         
         const html = await response.text();
+        console.log('Page fetched successfully');
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
-        const pageContent = doc.querySelector('.page-content');
+        const pageContent = doc.querySelector('.page-content') || doc.body;
         
         if (pageContent) {
             // Create a new container for this page
@@ -99,13 +114,17 @@ async function loadPageContent(page = '') {
             pageElement.innerHTML = pageContent.innerHTML;
             contentElement.appendChild(pageElement);
             pageElement.style.display = 'block';
+            console.log('Page content loaded:', page);
+        } else {
+            throw new Error('No .page-content found in the loaded page');
         }
     } catch (error) {
         console.error('Error loading page:', error);
         contentElement.innerHTML = `
             <div class="error-message">
-                <h2>Page Not Found</h2>
-                <p>The requested page could not be loaded: ${page}</p>
+                <h2>Error Loading Page</h2>
+                <p>Failed to load: ${page}</p>
+                <p>${error.message}</p>
                 <a href="/" class="btn" data-page="">Return to Home</a>
             </div>
         `;
