@@ -7,7 +7,7 @@ const terminalInput = document.querySelector('.command-input');
 const terminalContent = document.querySelector('.terminal-content');
 const chatbot = document.getElementById('chatbot');
 const chatbotToggle = document.getElementById('chatbot-toggle');
-const chatMessages = document.getElementById('chat-messages');
+const chatMessages = document.getElementById('chat-messages') || { appendChild: () => {} };
 const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
 const navLinks = document.querySelectorAll('.nav-link');
@@ -30,22 +30,30 @@ const commands = {
     theme: 'Usage: theme [light/dark/toggle]',
     'theme light': () => {
         html.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'light');
+        if (themeSwitch) themeSwitch.checked = false;
         return 'Switched to light theme';
     },
     'theme dark': () => {
         html.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+        if (themeSwitch) themeSwitch.checked = true;
         return 'Switched to dark theme';
     },
     'theme toggle': () => {
         const currentTheme = html.getAttribute('data-theme');
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
         html.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        if (themeSwitch) themeSwitch.checked = newTheme === 'dark';
         return `Switched to ${newTheme} theme`;
     }
 };
 
 // Initialize terminal
 function initTerminal() {
+    if (!terminal || !terminalInput || !terminalContent) return;
+    
     // Add welcome message
     addTerminalLine('Welcome to the terminal! Type "help" for available commands.');
     
@@ -63,17 +71,19 @@ function initTerminal() {
     });
     
     // Set up terminal toggle
-    terminalToggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        terminal.classList.toggle('active');
-        if (terminal.classList.contains('active')) {
-            terminalInput.focus();
-        }
-    });
+    if (terminalToggle) {
+        terminalToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            terminal.classList.toggle('active');
+            if (terminal.classList.contains('active')) {
+                terminalInput.focus();
+            }
+        });
+    }
     
     // Close terminal when clicking outside
     document.addEventListener('click', (e) => {
-        if (!e.target.closest('.terminal') && !e.target.closest('.terminal-toggle')) {
+        if (terminal && !e.target.closest('.terminal') && !e.target.closest('.terminal-toggle')) {
             terminal.classList.remove('active');
         }
     });
@@ -153,37 +163,50 @@ terminalInput.addEventListener('keydown', (e) => {
     }
 });
 
-// Add line to terminal
-function addTerminalLine(text, type = 'output') {
-    const line = document.createElement('div');
-    line.className = `terminal-line ${type}`;
+// Initialize Chatbot
+function initChatbot() {
+    if (!chatbot || !chatMessages) return;
     
-    if (type === 'input') {
-        line.innerHTML = `<span class="prompt">visitor@portfolio:~$</span> ${text.replace('visitor@portfolio:~$', '').trim()}`;
-    } else {
-        line.textContent = text;
+    // Add welcome message if chat is empty
+    if (chatMessages.children.length === 0) {
+        addMessage('Hello! I\'m your AI assistant. How can I help you today?');
+    }
+    
+    // Chatbot Toggle
+    if (chatbotToggle) {
+        chatbotToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            chatbot.classList.toggle('active');
+            if (chatbot.classList.contains('active') && userInput) {
+                setTimeout(() => userInput.focus(), 100);
+            }
+        });
+    }
     
     // Close Chatbot when clicking outside
     document.addEventListener('click', (e) => {
-        if (!e.target.closest('#chatbot') && !e.target.closest('#chatbot-toggle')) {
+        if (chatbot && !e.target.closest('#chatbot') && !e.target.closest('#chatbot-toggle')) {
             chatbot.classList.remove('active');
         }
     });
     
     // Close button
     if (closeChatbot) {
-        closeChatbot.addEventListener('click', () => {
-            chatbot.classList.remove('active');
+        closeChatbot.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (chatbot) chatbot.classList.remove('active');
         });
     }
     
-    // Send message on Enter
-    userInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            sendMessage();
-        }
-    });
+    // Send message on Enter (but allow Shift+Enter for new lines)
+    if (userInput) {
+        userInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+    }
     
     // Send button
     if (sendBtn) {
@@ -260,22 +283,69 @@ function sendMessage() {
 
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    initTerminal();
-    initChatbot();
-    
-    // Set initial theme
+    // Initialize theme
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
     if (themeSwitch) {
         themeSwitch.checked = savedTheme === 'dark';
-    }
-    
-    // Theme toggle
-    if (themeSwitch) {
         themeSwitch.addEventListener('change', (e) => {
             const theme = e.target.checked ? 'dark' : 'light';
             document.documentElement.setAttribute('data-theme', theme);
             localStorage.setItem('theme', theme);
+        });
+    }
+    
+    // Initialize components
+    if (typeof initTerminal === 'function') initTerminal();
+    if (typeof initChatbot === 'function') initChatbot();
+    
+    // Set up navigation
+    if (navLinks && navLinks.length > 0) {
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const page = link.getAttribute('data-page');
+                if (page) {
+                    // Close terminal when navigating
+                    if (terminal) terminal.classList.remove('active');
+                    // Load the page
+                    loadPageContent(page);
+                    // Update URL
+                    window.history.pushState({}, '', `#${page}`);
+                    // Update active nav link
+                    navLinks.forEach(navLink => navLink.classList.remove('active'));
+                    link.classList.add('active');
+                }
+            });
+        });
+    }
+    
+    // Handle browser back/forward
+    window.addEventListener('popstate', () => {
+        const page = window.location.hash.substring(1) || 'home';
+        loadPageContent(page);
+        // Update active nav link
+        if (navLinks && navLinks.length > 0) {
+            navLinks.forEach(link => {
+                if (link.getAttribute('data-page') === page) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        }
+    });
+    
+    // Load initial page
+    const initialPage = window.location.hash.substring(1) || 'home';
+    loadPageContent(initialPage);
+    
+    // Set initial active nav link
+    if (navLinks && navLinks.length > 0) {
+        navLinks.forEach(link => {
+            if (link.getAttribute('data-page') === initialPage) {
+                link.classList.add('active');
+            }
         });
     }
 });
