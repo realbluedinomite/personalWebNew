@@ -12,6 +12,7 @@ const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
 const navLinks = document.querySelectorAll('.nav-link');
 const pageContent = document.getElementById('page-content');
+const closeChatbot = document.querySelector('.close-chatbot');
 
 // Terminal Commands
 const commands = {
@@ -37,13 +38,69 @@ const commands = {
     },
     'theme toggle': () => {
         const currentTheme = html.getAttribute('data-theme');
-        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
         html.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-        themeSwitch.checked = newTheme === 'dark';
         return `Switched to ${newTheme} theme`;
     }
 };
+
+// Initialize terminal
+function initTerminal() {
+    // Add welcome message
+    addTerminalLine('Welcome to the terminal! Type "help" for available commands.');
+    
+    // Set up terminal input
+    terminalInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            const command = terminalInput.value.trim();
+            if (command) {
+                addTerminalLine(`$ ${command}`, 'input');
+                processCommand(command);
+                terminalInput.value = '';
+            }
+            e.preventDefault();
+        }
+    });
+    
+    // Set up terminal toggle
+    terminalToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        terminal.classList.toggle('active');
+        if (terminal.classList.contains('active')) {
+            terminalInput.focus();
+        }
+    });
+    
+    // Close terminal when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.terminal') && !e.target.closest('.terminal-toggle')) {
+            terminal.classList.remove('active');
+        }
+    });
+}
+
+// Process terminal commands
+function processCommand(command) {
+    const args = command.split(' ');
+    const cmd = args[0].toLowerCase();
+    const response = commands[cmd] || `Command not found: ${cmd}. Type 'help' for available commands.`;
+    
+    if (typeof response === 'function') {
+        const result = response();
+        if (result) addTerminalLine(result);
+    } else {
+        addTerminalLine(response);
+    }
+}
+
+// Add line to terminal
+function addTerminalLine(text, type = 'output') {
+    const line = document.createElement('div');
+    line.className = `terminal-line ${type}`;
+    line.textContent = text;
+    terminalContent.appendChild(line);
+    terminalContent.scrollTop = terminalContent.scrollHeight;
+}
 
 // Initialize theme from localStorage
 const savedTheme = localStorage.getItem('theme') || 'light';
@@ -105,52 +162,70 @@ function addTerminalLine(text, type = 'output') {
         line.innerHTML = `<span class="prompt">visitor@portfolio:~$</span> ${text.replace('visitor@portfolio:~$', '').trim()}`;
     } else {
         line.textContent = text;
+    
+    // Close Chatbot when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('#chatbot') && !e.target.closest('#chatbot-toggle')) {
+            chatbot.classList.remove('active');
+        }
+    });
+    
+    // Close button
+    if (closeChatbot) {
+        closeChatbot.addEventListener('click', () => {
+            chatbot.classList.remove('active');
+        });
     }
     
-    terminalContent.appendChild(line);
-    terminalContent.scrollTop = terminalContent.scrollHeight;
+    // Send message on Enter
+    userInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+    
+    // Send button
+    if (sendBtn) {
+        sendBtn.addEventListener('click', sendMessage);
+    }
 }
-
-// Chatbot Toggle
-chatbotToggle.addEventListener('click', () => {
-    chatbot.classList.toggle('active');
-});
-
-// Close Chatbot
-document.querySelector('.chatbot-close').addEventListener('click', () => {
-    chatbot.classList.remove('active');
-});
-
-// Chatbot Responses
-const botResponses = {
-    'hello': 'Hello! How can I help you today?',
-    'hi': 'Hi there! How can I assist you?',
-    'what can you do': 'I can answer questions about this website, provide information about the owner, and help you navigate through different sections. Try asking about skills, experience, or projects!',
-    'skills': 'Here are some of the skills: Web Development, JavaScript, React, Node.js, and more. Check the About section for details!',
-    'experience': 'The owner has experience in various web technologies and frameworks. Visit the Resume section for a detailed work history.',
-    'projects': 'There are several projects in the portfolio. Check the Projects section to see them!',
-    'contact': 'You can reach out through the Contact section. There\'s a form you can fill out.',
-    'default': 'I\'m not sure how to respond to that. Could you rephrase your question?'
-};
 
 // Get bot response
 function getBotResponse(input) {
     input = input.toLowerCase();
     
-    for (const [key, value] of Object.entries(botResponses)) {
-        if (input.includes(key)) {
-            return value;
-        }
+    // Simple responses
+    if (input.includes('hello') || input.includes('hi') || input.includes('hey')) {
+        return 'Hello! How can I help you today?';
+    } else if (input.includes('how are you')) {
+        return 'I\'m just a bot, but I\'m functioning well! How can I assist you?';
+    } else if (input.includes('thank')) {
+        return 'You\'re welcome! Is there anything else I can help with?';
+    } else if (input.includes('bye') || input.includes('goodbye')) {
+        return 'Goodbye! Feel free to come back if you have more questions.';
+    } else if (input.includes('help')) {
+        return 'You can ask me about the website, the developer, or use the navigation menu to explore different sections.';
+    } else if (input.includes('name')) {
+        return 'I\'m your friendly AI assistant for this website. You can call me Assistant.';
+    } else if (input.includes('website') || input.includes('site')) {
+        return 'This is a personal portfolio website built with HTML, CSS, and JavaScript. It features a terminal, chatbot, and responsive design.';
+    } else if (input.includes('contact') || input.includes('email') || input.includes('phone')) {
+        return 'You can find contact information on the Contact page. Use the navigation menu to get there.';
+    } else if (input.includes('resume') || input.includes('cv')) {
+        return 'You can view or download the resume from the Resume page. Use the navigation menu to get there.';
+    } else if (input.includes('terminal') || input.includes('command')) {
+        return 'You can use the terminal in the sidebar to navigate the website or get information. Try typing "help" in the terminal for available commands.';
+    } else {
+        return 'I\'m not sure how to respond to that. You can ask me about the website, the developer, or use the navigation menu to explore different sections.';
     }
-    
-    return botResponses['default'];
 }
 
 // Add message to chat
 function addMessage(message, isUser = false) {
     const messageDiv = document.createElement('div');
     messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
-    messageDiv.innerHTML = `<p>${message}</p>`;
+    messageDiv.textContent = message;
     chatMessages.appendChild(messageDiv);
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
@@ -163,18 +238,45 @@ function sendMessage() {
     addMessage(message, true);
     userInput.value = '';
     
-    // Simulate typing
+    // Show typing indicator
+    const typingIndicator = document.createElement('div');
+    typingIndicator.className = 'message bot typing';
+    typingIndicator.innerHTML = '<span></span><span></span><span></span>';
+    chatMessages.appendChild(typingIndicator);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    
+    // Simulate typing delay
     setTimeout(() => {
+        // Remove typing indicator
+        if (typingIndicator.parentNode) {
+            typingIndicator.remove();
+        }
+        
+        // Get and display response
         const response = getBotResponse(message);
         addMessage(response);
-    }, 500);
+    }, 1000 + Math.random() * 1000); // Random delay between 1-2 seconds
 }
 
-// Event Listeners for chat
-sendBtn.addEventListener('click', sendMessage);
-userInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-        sendMessage();
+// Initialize everything when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    initTerminal();
+    initChatbot();
+    
+    // Set initial theme
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    if (themeSwitch) {
+        themeSwitch.checked = savedTheme === 'dark';
+    }
+    
+    // Theme toggle
+    if (themeSwitch) {
+        themeSwitch.addEventListener('change', (e) => {
+            const theme = e.target.checked ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        });
     }
 });
 
