@@ -650,18 +650,6 @@ function toggleTheme() {
     document.documentElement.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme', newTheme);
     if (themeSwitch) {
-        themeSwitch.checked = newTheme === 'dark';
-    }
-}
-
-// Initialize everything when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    // Initialize theme
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    if (themeSwitch) {
-        themeSwitch.checked = savedTheme === 'dark';
-        themeSwitch.addEventListener('change', toggleTheme);
     }
     
     // Initialize chatbot if on the main page
