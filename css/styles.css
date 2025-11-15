@@ -1698,3 +1698,143 @@ input:checked + .slider:before {
     border-color: #444;
     color: #fff;
 }
+
+/* Enhanced Terminal Page Styling */
+.terminal-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.terminal-container {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  border: 2px solid #404040;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.terminal-header {
+  background: linear-gradient(to bottom, #333333, #2a2a2a);
+  border-bottom: 1px solid #404040;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  font-family: 'Courier New', monospace;
+}
+
+.terminal-header::before {
+  content: '';
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ff5f56;
+  margin-right: 8px;
+  box-shadow: 20px 0 0 #ffbd2e, 40px 0 0 #27c93f;
+}
+
+.terminal {
+  background-color: #1e1e1e;
+  color: #d4d4d4;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  padding: 16px;
+  overflow-y: auto;
+  max-height: 600px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.terminal-content {
+  flex: 1;
+  padding: 0;
+}
+
+.terminal-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.terminal-input {
+  background: #2a2a2a;
+  border: 1px solid #404040;
+  border-radius: 4px;
+  padding: 12px 16px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  color: #00d4ff;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.terminal-input::before {
+  content: '$ ';
+  color: #00d4ff;
+  margin-right: 8px;
+  font-weight: bold;
+}
+
+/* Terminal Feature Buttons */
+.terminal-feature {
+  background: #2a2a2a;
+  border: 1px solid #404040;
+  border-radius: 6px;
+  padding: 16px;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.terminal-feature:hover {
+  background: #333333;
+  border-color: #505050;
+  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.2);
+}
+
+.terminal-feature-tag {
+  display: inline-block;
+  background: linear-gradient(135deg, #0066cc, #0099ff);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.terminal-feature-description {
+  color: #a0a0a0;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* CTA Section Styling */
+.cta {
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.cta h2 {
+  color: #d4d4d4;
+  font-size: 24px;
+  margin-bottom: 12px;
+  font-family: 'Courier New', monospace;
+}
+
+.cta p {
+  color: #a0a0a0;
+  margin-bottom: 24px;
+  font-family: 'Courier New', monospace;
+}
+
