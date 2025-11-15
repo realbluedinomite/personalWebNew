@@ -32,7 +32,15 @@
       "dest": "/images/$1"
     },
     {
-      "src": "/(.*)",
+      "src": "/pages/(.*)",
+      "dest": "/pages/$1"
+    },
+    {
+      "src": "/(about|resume|portfolio|blog|projects|contact|terminal)/?",
+      "dest": "/pages/$1/index.html"
+    },
+    {
+      "src": "/",
       "dest": "/index.html"
     }
   ]
