@@ -137,22 +137,104 @@ async function loadPageContent(page = '') {
         }
         
         // For other pages
+        console.log(`Fetching: /pages/${page}/index.html`);
         const response = await fetch(`/pages/${page}/index.html`);
-        if (!response.ok) throw new Error(`Page not found: ${page}`);
+        console.log(`Response status: ${response.status}`);
+        
+        if (!response.ok) {
+            console.error(`Failed to fetch page: ${response.status} ${response.statusText}`);
+            throw new Error(`Page not found: ${page}`);
+        }
         
         const html = await response.text();
-        contentElement.innerHTML = html;
+        console.log(`Raw HTML length: ${html.length}`);
+        
+        // Extract only the content inside the page-content div if it exists
+        let contentToInsert = html;
+        const contentMatch = html.match(/<div[^>]*class="page-content"[^>]*>([\s\S]*?)<\/div>/);
+        if (contentMatch) {
+            contentToInsert = contentMatch[1];
+            console.log('Extracted content from page-content div');
+        } else {
+            console.log('No page-content div found, using full HTML');
+        }
+        
+        contentElement.innerHTML = contentToInsert;
         console.log(`Page loaded: ${page}`);
         
     } catch (error) {
         console.error('Error loading page:', error);
-        contentElement.innerHTML = `
-            <div class="error-message">
-                <h2>Error Loading Page</h2>
-                <p>${error.message}</p>
-                <a href="/" class="btn" data-page="">Return to Home</a>
-            </div>
-        `;
+        
+        // Provide fallback content for common pages
+        let fallbackContent = '';
+        switch(page) {
+            case 'about':
+                fallbackContent = `
+<div class="about-page">
+    <h1>About Me</h1>
+    <p>Hello! I'm a web developer passionate about creating beautiful and functional websites.</p>
+    <p>This is a fallback version of the about page. The full page content will be available soon.</p>
+</div>`;
+                break;
+            case 'contact':
+                fallbackContent = `
+<div class="contact-page">
+    <h1>Contact Me</h1>
+    <p>Get in touch with me through the form below or via email.</p>
+    <p>This is a fallback version of the contact page. The full contact form will be available soon.</p>
+</div>`;
+                break;
+            case 'resume':
+                fallbackContent = `
+<div class="resume-page">
+    <h1>My Resume</h1>
+    <p>Download my resume to learn more about my experience and skills.</p>
+    <p>This is a fallback version of the resume page. The full resume will be available soon.</p>
+</div>`;
+                break;
+            case 'portfolio':
+                fallbackContent = `
+<div class="portfolio-page">
+    <h1>Portfolio</h1>
+    <p>Check out some of my recent projects and work.</p>
+    <p>This is a fallback version of the portfolio page. The full portfolio will be available soon.</p>
+</div>`;
+                break;
+            case 'blog':
+                fallbackContent = `
+<div class="blog-page">
+    <h1>Blog</h1>
+    <p>Read my latest thoughts and articles on web development and technology.</p>
+    <p>This is a fallback version of the blog page. The full blog will be available soon.</p>
+</div>`;
+                break;
+            case 'projects':
+                fallbackContent = `
+<div class="projects-page">
+    <h1>Projects</h1>
+    <p>Explore my open-source projects and contributions.</p>
+    <p>This is a fallback version of the projects page. The full projects list will be available soon.</p>
+</div>`;
+                break;
+            case 'terminal':
+                fallbackContent = `
+<div class="terminal-page">
+    <h1>Terminal</h1>
+    <p>Interactive terminal interface for navigating the site.</p>
+    <p>This is a fallback version of the terminal page. The full terminal will be available soon.</p>
+</div>`;
+                break;
+            default:
+                fallbackContent = `
+<div class="error-message">
+    <h2>Page Not Found</h2>
+    <p>The page "${page}" could not be loaded.</p>
+    <p>Error: ${error.message}</p>
+    <a href="/" class="btn" data-page="">Return to Home</a>
+</div>`;
+        }
+        
+        contentElement.innerHTML = fallbackContent;
     }
 }
 

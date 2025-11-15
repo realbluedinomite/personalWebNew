@@ -32,6 +32,34 @@
       "dest": "/images/$1"
     },
     {
+      "src": "/pages/about/index.html",
+      "dest": "/pages/about/index.html"
+    },
+    {
+      "src": "/pages/blog/index.html",
+      "dest": "/pages/blog/index.html"
+    },
+    {
+      "src": "/pages/contact/index.html",
+      "dest": "/pages/contact/index.html"
+    },
+    {
+      "src": "/pages/portfolio/index.html",
+      "dest": "/pages/portfolio/index.html"
+    },
+    {
+      "src": "/pages/projects/index.html",
+      "dest": "/pages/projects/index.html"
+    },
+    {
+      "src": "/pages/resume/index.html",
+      "dest": "/pages/resume/index.html"
+    },
+    {
+      "src": "/pages/terminal/index.html",
+      "dest": "/pages/terminal/index.html"
+    },
+    {
       "src": "/pages/home/index.html",
       "dest": "/pages/home/index.html"
     },
