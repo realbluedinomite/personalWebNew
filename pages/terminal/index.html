@@ -63,9 +63,9 @@
         }
         .command-input {
             flex: 1;
-            background: transparent;
+            background: #1e1e1e;
             border: none;
-            color: #f0f0f0;
+            color: ##00d4ff;
             font-family: 'Courier New', monospace;
             font-size: 14px;
             outline: none;
@@ -83,6 +83,30 @@
     </style>
 </head>
 <body>
+    <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-content">
+        <div class="profile-section">
+          <img src="/images/profile.jpg" alt="Profile Picture" class="profile-pic">
+          <h2>Your Name</h2>
+          <p>Web Developer</p>
+        </div>
+        <nav class="nav-menu">
+          <ul>
+            <li><a href="/" class="nav-link active" data-page=""><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="/about/" class="nav-link" data-page="about"><i class="fas fa-user"></i> About</a></li>
+            <li><a href="/resume/" class="nav-link" data-page="resume"><i class="fas fa-file-alt"></i> Resume</a></li>
+            <li><a href="/portfolio/" class="nav-link" data-page="portfolio"><i class="fas fa-briefcase"></i> Portfolio</a></li>
+            <li><a href="/blog/" class="nav-link" data-page="blog"><i class="fas fa-blog"></i> Blog</a></li>
+            <li><a href="/projects/" class="nav-link" data-page="projects"><i class="fas fa-code"></i> Projects</a></li>
+            <li><a href="/contact/" class="nav-link" data-page="contact"><i class="fas fa-envelope"></i> Contact</a></li>
+            <li><a href="/terminal/" class="nav-link" data-page="terminal"><i class="fas fa-terminal"></i> Terminal</a></li>
+          </ul>
+        </nav>
+        <button class="theme-toggle" id="theme-switch"><i class="fas fa-moon"></i> Dark Mode</button>
+      </div>
+    </aside>
     <div class="page-content">
         <div class="terminal-page">
             <a href="#home" class="back-button" data-page="home">
@@ -106,34 +130,6 @@
                 </div>
             </div>
             
-            <div class="terminal-features">
-                <h2>Available Commands</h2>
-                <div class="command-list">
-                    <div class="command-item">
-                        <code>help</code>
-                        <p>Show available commands</p>
-                    </div>
-                    <div class="command-item">
-                        <code>about</code>
-                        <p>Navigate to about page</p>
-                    </div>
-                    <div class="command-item">
-                        <code>portfolio</code>
-                        <p>View portfolio projects</p>
-                    </div>
-                    <div class="command-item">
-                        <code>contact</code>
-                        <p>Get contact information</p>
-                    </div>
-                    <div class="command-item">
-                        <code>skills</code>
-                        <p>List technical skills</p>
-                    </div>
-                    <div class="command-item">
-                        <code>clear</code>
-                        <p>Clear terminal screen</p>
-                    </div>
-                </div>
             </div>
             
             <div class="cta">
