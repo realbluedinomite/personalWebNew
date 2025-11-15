@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Layout Test</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-content">
+                <div class="profile-section">
+                    <h2>Test Layout</h2>
+                    <p>Checking sidebar display</p>
+                </div>
+                <nav class="nav-menu">
+                    <ul>
+                        <li><a href="/" class="nav-link active">Home</a></li>
+                        <li><a href="/about/" class="nav-link">About</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div id="page-content" class="page-content">
+                <h1>Main Content Area</h1>
+                <p>This should display properly without any miniature sidebar.</p>
+                <p>The sidebar should be on the left and this content should take up the remaining space.</p>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

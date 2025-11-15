@@ -234,34 +234,32 @@ a {
 }
 
 a:hover {
-    color: var(--accent-color);
+color: var(--accent-color);
 }
 
 /* Layout */
 .app-container {
-    display: flex;
-    min-height: 100vh;
+display: flex;
+min-height: 100vh;
 }
 
 /* Sidebar */
 .sidebar {
-    width: 280px;
-    background-color: var(--sidebar-bg);
-    color: var(--sidebar-text);
-    padding: 20px 0;
-    position: fixed;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    transition: all 0.3s ease;
-    z-index: 100;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+width: 280px;
+background-color: var(--sidebar-bg);
+color: var(--sidebar-text);
+padding: 20px 0;
+position: relative;
+transition: all 0.3s ease;
+z-index: 100;
+box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+flex-shrink: 0;
 }
 
 .sidebar-content {
-    flex: 1;
-    overflow-y: auto;
-    padding: 0 20px;
+flex: 1;
+overflow-y: auto;
+padding: 0 20px;
 }
 
 .profile-section {
@@ -368,10 +366,10 @@ input:checked + .slider:before {
 /* Main Content */
 .main-content {
     flex: 1;
-    margin-left: 250px;
     padding: 2rem;
     position: relative;
     min-height: 100vh;
+    overflow-y: auto;
 }
 
 .page-content {
@@ -526,11 +524,15 @@ input:checked + .slider:before {
 /* Responsive Design */
 @media (max-width: 992px) {
     .sidebar {
-        transform: translateX(-100%);
+        position: fixed;
+        left: -280px;
+        top: 0;
+        height: 100vh;
+        transition: left 0.3s ease;
     }
     
     .sidebar.active {
-        transform: translateX(0);
+        left: 0;
     }
     
     .main-content {
