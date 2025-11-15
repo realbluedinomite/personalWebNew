@@ -162,6 +162,9 @@ async function loadPageContent(page = '') {
         contentElement.innerHTML = contentToInsert;
         console.log(`Page loaded: ${page}`);
         
+        // Re-attach event listeners for the new content
+        attachEventListeners();
+        
     } catch (error) {
         console.error('Error loading page:', error);
         
@@ -236,6 +239,31 @@ async function loadPageContent(page = '') {
         
         contentElement.innerHTML = fallbackContent;
     }
+}
+
+// Re-attach event listeners for dynamically loaded content
+function attachEventListeners() {
+    // Re-attach navigation link listeners
+    const navLinks = contentElement.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const page = link.getAttribute('data-page') || '';
+            navigateToPage(page);
+        });
+    });
+    
+    // Re-attach any other event listeners as needed
+    const buttons = contentElement.querySelectorAll('.btn');
+    buttons.forEach(button => {
+        if (button.hasAttribute('data-page')) {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const page = button.getAttribute('data-page') || '';
+                navigateToPage(page);
+            });
+        }
+    });
 }
 
 // Initialize the page
