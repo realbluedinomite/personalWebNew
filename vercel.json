@@ -36,6 +36,10 @@
       "dest": "/pages/$1"
     },
     {
+      "src": "/home",
+      "dest": "/pages/home/index.html"
+    },
+    {
       "src": "/(about|resume|portfolio|blog|projects|contact|terminal)/?",
       "dest": "/pages/$1/index.html"
     },
