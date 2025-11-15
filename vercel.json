@@ -32,6 +32,10 @@
       "dest": "/images/$1"
     },
     {
+      "src": "/pages/home/index.html",
+      "dest": "/pages/home/index.html"
+    },
+    {
       "src": "/pages/(.*)",
       "dest": "/pages/$1"
     },

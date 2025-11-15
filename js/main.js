@@ -98,13 +98,40 @@ async function loadPageContent(page = '') {
         // Default to home if no page specified
         if (!page) page = 'home';
         
-        // Special handling for home page
+        // Special handling for home page - use inline content
         if (page === 'home') {
-            const response = await fetch('/pages/home/index.html');
-            if (!response.ok) throw new Error('Home page not found');
-            
-            const html = await response.text();
-            contentElement.innerHTML = html;
+            const homeContent = `
+<div class="home-page">
+    <h1>Welcome to My Personal Website</h1>
+    <p>Hello! I'm a web developer passionate about creating beautiful and functional websites.</p>
+    
+    <div class="features">
+        <div class="feature">
+            <i class="fas fa-code"></i>
+            <h3>Web Development</h3>
+            <p>Building responsive and modern web applications using the latest technologies.</p>
+        </div>
+        
+        <div class="feature">
+            <i class="fas fa-paint-brush"></i>
+            <h3>UI/UX Design</h3>
+            <p>Creating intuitive and engaging user experiences with clean, modern design.</p>
+        </div>
+        
+        <div class="feature">
+            <i class="fas fa-terminal"></i>
+            <h3>Terminal</h3>
+            <p>Try out the <a href="#terminal" class="nav-link" data-page="terminal">terminal</a> to navigate the site or get information.</p>
+        </div>
+    </div>
+    
+    <div class="cta">
+        <h2>Let's Work Together</h2>
+        <p>Have a project in mind? Get in touch with me!</p>
+        <a href="#contact" class="btn" data-page="contact">Contact Me</a>
+    </div>
+</div>`;
+            contentElement.innerHTML = homeContent;
             console.log('Home page loaded');
             return;
         }
