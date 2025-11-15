@@ -151,23 +151,27 @@ async function loadPageContent(page = '') {
         console.log(`First 500 chars of HTML:`, html.substring(0, 500));
         
         // Extract only the content inside the page-content div if it exists
-        let contentToInsert = html;
-        const contentMatch = html.match(/<div[^>]*class="page-content"[^>]*>([\s\S]*?)<\/div>/);
-        if (contentMatch) {
-            contentToInsert = contentMatch[1];
-            console.log('Extracted content from page-content div');
-            console.log(`Extracted content length: ${contentToInsert.length}`);
-        } else {
-            console.log('No page-content div found, using full HTML');
-            // Try alternative patterns
-            const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/);
-            if (bodyMatch) {
-                contentToInsert = bodyMatch[1];
-                console.log('Extracted content from body tag');
-            }
-        }
+        // Use DOMParser to extract content reliably
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const pageContentDiv = doc.querySelector('div.page-content');
         
-        contentElement.innerHTML = contentToInsert;
+        let contentToInsert = html;
+        
+        if (pageContentDiv) {
+            // Found page-content div, use its innerHTML
+            contentToInsert = pageContentDiv.innerHTML;
+            console.log('Extracted content from page-content div:', contentToInsert.substring(0, 100));
+        } else {
+            // Fallback: try to extract from body
+            const bodyContent = doc.querySelector('body');
+            if (bodyContent) {
+                contentToInsert = bodyContent.innerHTML;
+                console.log('Extracted content from body tag');
+            } else {
+                console.log('Using full HTML as fallback');
+            }
+        }contentElement.innerHTML = contentToInsert;
         console.log(`Page loaded: ${page}`);
         
         // Re-attach event listeners for the new content
