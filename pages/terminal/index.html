@@ -83,32 +83,67 @@
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <main class="main-content">
-            <div class="terminal-page">
-                <a href="#home" class="back-button">
-                    <i class="fas fa-arrow-left"></i> Back to Home
-                </a>
-                <h1>Terminal</h1>
-                <p>Use the terminal to navigate the website or get information. Type 'help' for available commands.</p>
-                
-                <div class="terminal-container">
-                    <div class="terminal-header">
-                        <span>Terminal</span>
+    <div class="page-content">
+        <div class="terminal-page">
+            <a href="#home" class="back-button" data-page="home">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+            <h1>Terminal</h1>
+            <p>Use the terminal to navigate the website or get information. Type 'help' for available commands.</p>
+            
+            <div class="terminal-container">
+                <div class="terminal-header">
+                    <span>Terminal</span>
+                </div>
+                <div id="terminal" class="terminal">
+                    <div class="terminal-content">
+                        <div class="terminal-line">Welcome to the terminal! Type 'help' for available commands.</div>
                     </div>
-                    <div id="terminal" class="terminal">
-                        <div class="terminal-content">
-                            <div class="terminal-line">Welcome to the terminal! Type 'help' for available commands.</div>
-                        </div>
-                        <div class="terminal-input">
-                            <span class="prompt">$</span>
-                            <input type="text" class="command-input" placeholder="Type 'help' for commands" autofocus>
-                        </div>
+                    <div class="terminal-input">
+                        <span class="prompt">$</span>
+                        <input type="text" class="command-input" placeholder="Type 'help' for commands" autofocus>
                     </div>
                 </div>
             </div>
-        </main>
+            
+            <div class="terminal-features">
+                <h2>Available Commands</h2>
+                <div class="command-list">
+                    <div class="command-item">
+                        <code>help</code>
+                        <p>Show available commands</p>
+                    </div>
+                    <div class="command-item">
+                        <code>about</code>
+                        <p>Navigate to about page</p>
+                    </div>
+                    <div class="command-item">
+                        <code>portfolio</code>
+                        <p>View portfolio projects</p>
+                    </div>
+                    <div class="command-item">
+                        <code>contact</code>
+                        <p>Get contact information</p>
+                    </div>
+                    <div class="command-item">
+                        <code>skills</code>
+                        <p>List technical skills</p>
+                    </div>
+                    <div class="command-item">
+                        <code>clear</code>
+                        <p>Clear terminal screen</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="cta">
+                <h2>Try It Out!</h2>
+                <p>Experience a unique way to navigate through my website using terminal commands.</p>
+                <a href="#home" class="btn" data-page="home">Return to Home</a>
+            </div>
+        </div>
     </div>
     <script src="/js/terminal.js"></script>
+    <script src="/js/main.js"></script>
 </body>
 </html>
