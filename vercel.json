@@ -14,7 +14,15 @@
       "use": "@vercel/static"
     },
     {
+      "src": "js/terminal.js",
+      "use": "@vercel/static"
+    },
+    {
       "src": "images/*",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "pages/**/*.html",
       "use": "@vercel/static"
     }
   ],

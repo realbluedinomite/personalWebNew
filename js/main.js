@@ -148,6 +148,7 @@ async function loadPageContent(page = '') {
         
         const html = await response.text();
         console.log(`Raw HTML length: ${html.length}`);
+        console.log(`First 500 chars of HTML:`, html.substring(0, 500));
         
         // Extract only the content inside the page-content div if it exists
         let contentToInsert = html;
@@ -155,8 +156,15 @@ async function loadPageContent(page = '') {
         if (contentMatch) {
             contentToInsert = contentMatch[1];
             console.log('Extracted content from page-content div');
+            console.log(`Extracted content length: ${contentToInsert.length}`);
         } else {
             console.log('No page-content div found, using full HTML');
+            // Try alternative patterns
+            const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/);
+            if (bodyMatch) {
+                contentToInsert = bodyMatch[1];
+                console.log('Extracted content from body tag');
+            }
         }
         
         contentElement.innerHTML = contentToInsert;
