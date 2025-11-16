@@ -5,10 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog - My Personal Website</title>
     <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-    <div class="page-content">
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-content">
+                <div class="profile-section">
+                    <img src="/images/profile.jpg" alt="Profile Picture" class="profile-pic" onerror="this.style.display='none'">
+                    <h2>Your Name</h2>
+                    <p>Web Developer</p>
+                </div>
+                <nav class="nav-menu">
+                    <ul>
+                        <li><a href="/" class="nav-link" data-page=""><i class="fas fa-home"></i> Home</a></li>
+                        <li><a href="/about/" class="nav-link" data-page="about"><i class="fas fa-user"></i> About</a></li>
+                        <li><a href="/resume/" class="nav-link" data-page="resume"><i class="fas fa-file-alt"></i> Resume</a></li>
+                        <li><a href="/portfolio/" class="nav-link" data-page="portfolio"><i class="fas fa-briefcase"></i> Portfolio</a></li>
+                        <li><a href="/blog/" class="nav-link active" data-page="blog"><i class="fas fa-blog"></i> Blog</a></li>
+                        <li><a href="/projects/" class="nav-link" data-page="projects"><i class="fas fa-code"></i> Projects</a></li>
+                        <li><a href="/contact/" class="nav-link" data-page="contact"><i class="fas fa-envelope"></i> Contact</a></li>
+                        <li><a href="/terminal/" class="nav-link" data-page="terminal"><i class="fas fa-terminal"></i> Terminal</a></li>
+                    </ul>
+                </nav>
+                <div class="theme-switch-wrapper">
+                    <label class="theme-switch" for="theme-switch">
+                        <input type="checkbox" id="theme-switch" />
+                        <div class="slider round"></div>
+                    </label>
+                    <span id="theme-text">Dark Mode</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-content">
         <div class="blog-page">
             <h1>My Blog</h1>
             <p>Thoughts, tutorials, and insights about web development, technology, and design.</p>
@@ -110,6 +143,7 @@
                 </div>
             </div>
         </div>
+        </main>
     </div>
     <script src="/js/main.js"></script>
 </body>
