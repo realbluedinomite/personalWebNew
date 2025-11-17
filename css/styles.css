@@ -1838,3 +1838,22 @@ input:checked + .slider:before {
   font-family: 'Courier New', monospace;
 }
 
+/* Terminal Command Input Styles */
+.command-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #00d4ff;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  outline: none;
+}
+
+.command-input::placeholder {
+  color: #666;
+}
+
+.terminal-line.input {
+  color: #4CAF50;
+}
+
