@@ -288,7 +288,8 @@ function initPage() {
     const contentElement = document.getElementById('page-content');
     
     // Check if we're on a standalone page (not the main index.html)
-    const isStandalonePage = !document.querySelector('#home-content');
+    // Standalone pages have actual content, main index.html has loading state
+    const isStandalonePage = contentElement && !contentElement.querySelector('.loading');
     console.log('Is standalone page:', isStandalonePage);
     
     if (isStandalonePage) {
