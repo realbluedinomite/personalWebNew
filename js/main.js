@@ -1,6 +1,5 @@
 // DOM Elements
 const themeSwitch = document.getElementById('theme-switch');
-const contentElement = document.getElementById('page-content');
 
 // Initialize theme from localStorage
 const savedTheme = localStorage.getItem('theme') || 'light';
@@ -26,6 +25,9 @@ function toggleTheme() {
 async function navigateToPage(page = '') {
     console.log('Navigating to:', page || 'home');
     
+    // Get content element
+    const contentElement = document.getElementById('page-content');
+    
     // Update active nav link immediately for better UX
     updateActiveNavLink(page);
     
@@ -35,7 +37,7 @@ async function navigateToPage(page = '') {
         window.history.pushState({ page }, '', targetPath);
         
         // Load the page content
-        await loadPageContent(page);
+        await loadPageContent(page, contentElement);
     } catch (error) {
         console.error('Navigation error:', error);
         // Fallback to home page on error
@@ -76,7 +78,7 @@ function updateActiveNavLink(page) {
 }
 
 // Load page content
-async function loadPageContent(page = '') {
+async function loadPageContent(page = '', contentElement) {
     console.log('Loading page:', page || 'home');
     
     if (!contentElement) {
@@ -175,7 +177,7 @@ async function loadPageContent(page = '') {
         console.log(`Page loaded: ${page}`);
         
         // Re-attach event listeners for the new content
-        attachEventListeners();
+        attachEventListeners(contentElement);
         
     } catch (error) {
         console.error('Error loading page:', error);
@@ -254,7 +256,7 @@ async function loadPageContent(page = '') {
 }
 
 // Re-attach event listeners for dynamically loaded content
-function attachEventListeners() {
+function attachEventListeners(contentElement) {
     // Re-attach navigation link listeners
     const navLinks = contentElement.querySelectorAll('.nav-link');
     navLinks.forEach(link => {
@@ -282,6 +284,9 @@ function attachEventListeners() {
 function initPage() {
     console.log('Initializing page...');
     
+    // Get content element after DOM is ready
+    const contentElement = document.getElementById('page-content');
+    
     // Set up navigation
     document.addEventListener('click', (e) => {
         const link = e.target.closest('.nav-link');
@@ -296,7 +301,8 @@ function initPage() {
     window.addEventListener('popstate', (e) => {
         const page = window.location.pathname === '/' ? '' : 
                     window.location.pathname.replace(/^\/([^\/]+).*$/, '$1');
-        loadPageContent(page);
+        const contentElement = document.getElementById('page-content');
+        loadPageContent(page, contentElement);
         updateActiveNavLink(page);
     });
     
@@ -306,15 +312,10 @@ function initPage() {
     }
     
     // Load initial page
-    let initialPage = window.location.pathname === '/' ? '' : 
-                     window.location.pathname.replace(/^\/([^\/]+).*$/, '$1');
+    const initialPage = window.location.pathname.replace(/^\//, '').replace(/\/$/, '') || '';
+    console.log('Initial page from URL:', initialPage);
     
-    if (window.location.pathname === '/' || !initialPage) {
-        initialPage = '';
-    }
-    
-    console.log('Loading initial page:', initialPage || 'home');
-    loadPageContent(initialPage);
+    loadPageContent(initialPage, contentElement);
     updateActiveNavLink(initialPage);
 }
 
