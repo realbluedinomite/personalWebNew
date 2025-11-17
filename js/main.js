@@ -268,7 +268,15 @@ function attachEventListeners(contentElement) {
             if (typeof initTerminal === 'function') {
                 initTerminal();
             } else {
-                console.error('initTerminal function not found');
+                console.log('initTerminal function not found, loading terminal.js...');
+                // Load terminal.js if not already loaded
+                const script = document.createElement('script');
+                script.src = '/js/terminal.js';
+                script.onload = () => {
+                    console.log('terminal.js loaded, initializing terminal...');
+                    initTerminal();
+                };
+                document.head.appendChild(script);
             }
         }, 100);
     }
