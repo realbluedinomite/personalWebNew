@@ -287,6 +287,38 @@ function initPage() {
     // Get content element after DOM is ready
     const contentElement = document.getElementById('page-content');
     
+    // Check if we're on a standalone page (not the main index.html)
+    const isStandalonePage = !document.querySelector('#home-content');
+    console.log('Is standalone page:', isStandalonePage);
+    
+    if (isStandalonePage) {
+        // We're on a standalone page, don't do dynamic loading
+        console.log('Standalone page detected, skipping dynamic content loading');
+        
+        // Still set up navigation and theme
+        setupNavigationAndTheme();
+        
+        // Set active nav link based on current URL
+        const currentPage = window.location.pathname.replace(/^\//, '').replace(/\/$/, '') || '';
+        updateActiveNavLink(currentPage);
+        return;
+    }
+    
+    // We're on the main index.html, proceed with dynamic loading
+    console.log('Main page detected, enabling dynamic content loading');
+    
+    setupNavigationAndTheme();
+    
+    // Load initial page content
+    const initialPage = window.location.pathname.replace(/^\//, '').replace(/\/$/, '') || '';
+    console.log('Initial page from URL:', initialPage);
+    
+    loadPageContent(initialPage, contentElement);
+    updateActiveNavLink(initialPage);
+}
+
+// Separate function for setting up navigation and theme
+function setupNavigationAndTheme() {
     // Set up navigation
     document.addEventListener('click', (e) => {
         const link = e.target.closest('.nav-link');
@@ -310,13 +342,6 @@ function initPage() {
     if (themeSwitch) {
         themeSwitch.addEventListener('change', toggleTheme);
     }
-    
-    // Load initial page
-    const initialPage = window.location.pathname.replace(/^\//, '').replace(/\/$/, '') || '';
-    console.log('Initial page from URL:', initialPage);
-    
-    loadPageContent(initialPage, contentElement);
-    updateActiveNavLink(initialPage);
 }
 
 // Initialize the page when the DOM is loaded
