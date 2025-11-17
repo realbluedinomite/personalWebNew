@@ -63,12 +63,15 @@
         }
         .command-input {
             flex: 1;
-            background: #1e1e1e;
+            background: transparent;
             border: none;
             color: #00d4ff;
             font-family: 'Courier New', monospace;
             font-size: 14px;
             outline: none;
+        }
+        .command-input::placeholder {
+            color: #666;
         }
         .back-button {
             display: inline-block;

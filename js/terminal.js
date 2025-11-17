@@ -5,13 +5,9 @@ const terminalContent = document.querySelector('.terminal-content');
 
 // Terminal Commands
 const commands = {
-    help: 'Available commands: help, about, resume, portfolio, blog, projects, contact, clear, theme',
+    help: 'Available commands: help, about, resume, portfolio, blog, projects, contact, clear, theme, home',
     about: 'I am a passionate web developer with expertise in modern web technologies.',
     resume: 'Opening resume...',
-    portfolio: 'Navigating to portfolio...',
-    blog: 'Navigating to blog...',
-    projects: 'Navigating to projects...',
-    contact: 'Navigating to contact...',
     clear: () => {
         terminalContent.innerHTML = '';
         return '';
@@ -38,7 +34,14 @@ const commands = {
 
 // Initialize terminal
 function initTerminal() {
-    if (!terminal || !terminalInput || !terminalContent) return;
+    console.log('Initializing terminal...');
+    
+    if (!terminal || !terminalInput || !terminalContent) {
+        console.error('Terminal elements not found:', { terminal, terminalInput, terminalContent });
+        return;
+    }
+
+    console.log('Terminal elements found, setting up...');
 
     // Add welcome message
     addTerminalLine('Welcome to the terminal! Type "help" for available commands.');
@@ -58,12 +61,23 @@ function initTerminal() {
 
     // Focus the input on page load
     terminalInput.focus();
+    console.log('Terminal initialized successfully');
 }
 
 // Process terminal commands
 function processCommand(command) {
     const args = command.split(' ');
     const cmd = args[0].toLowerCase();
+    
+    // Handle navigation commands
+    if (['home', 'about', 'resume', 'portfolio', 'blog', 'projects', 'contact'].includes(cmd)) {
+        addTerminalLine(`Navigating to ${cmd}...`);
+        setTimeout(() => {
+            window.location.href = cmd === 'home' ? '/' : `/${cmd}/`;
+        }, 1000);
+        return;
+    }
+    
     const response = commands[cmd] || `Command not found: ${cmd}. Type 'help' for available commands.`;
     
     if (typeof response === 'function') {
@@ -85,6 +99,8 @@ function addTerminalLine(text, type = 'output') {
 
 // Initialize the terminal when the page loads
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('Terminal page DOMContentLoaded fired');
+    
     // Set initial theme
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
@@ -92,3 +108,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize terminal
     initTerminal();
 });
+
+// Also try to initialize immediately in case DOM is already loaded
+if (document.readyState === 'loading') {
+    console.log('Document still loading, waiting for DOMContentLoaded');
+} else {
+    console.log('Document already loaded, initializing terminal immediately');
+    initTerminal();
+}
