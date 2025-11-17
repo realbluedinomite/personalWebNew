@@ -105,14 +105,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
     
-    // Initialize terminal
-    initTerminal();
+    // Only initialize terminal if we're on the terminal page
+    if (terminal && terminalInput && terminalContent) {
+        console.log('Terminal elements found, initializing...');
+        initTerminal();
+    } else {
+        console.log('Not on terminal page, skipping initialization');
+    }
 });
 
 // Also try to initialize immediately in case DOM is already loaded
 if (document.readyState === 'loading') {
     console.log('Document still loading, waiting for DOMContentLoaded');
 } else {
-    console.log('Document already loaded, initializing terminal immediately');
-    initTerminal();
+    console.log('Document already loaded, checking for terminal...');
+    // Only initialize terminal if we're on the terminal page
+    if (terminal && terminalInput && terminalContent) {
+        console.log('Terminal elements found, initializing immediately');
+        initTerminal();
+    } else {
+        console.log('Not on terminal page, skipping initialization');
+    }
 }

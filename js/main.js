@@ -233,14 +233,6 @@ async function loadPageContent(page = '', contentElement) {
     <p>This is a fallback version of the projects page. The full projects list will be available soon.</p>
 </div>`;
                 break;
-            case 'terminal':
-                fallbackContent = `
-<div class="terminal-page">
-    <h1>Terminal</h1>
-    <p>Interactive terminal interface for navigating the site.</p>
-    <p>This is a fallback version of the terminal page. The full terminal will be available soon.</p>
-</div>`;
-                break;
             default:
                 fallbackContent = `
 <div class="error-message">
@@ -266,6 +258,20 @@ function attachEventListeners(contentElement) {
             navigateToPage(page);
         });
     });
+    
+    // Check if this is the terminal page and initialize it
+    const terminal = contentElement.querySelector('#terminal');
+    if (terminal) {
+        console.log('Terminal detected in dynamically loaded content, initializing...');
+        // Initialize terminal with a delay to ensure DOM is ready
+        setTimeout(() => {
+            if (typeof initTerminal === 'function') {
+                initTerminal();
+            } else {
+                console.error('initTerminal function not found');
+            }
+        }, 100);
+    }
     
     // Re-attach any other event listeners as needed
     const buttons = contentElement.querySelectorAll('.btn');
