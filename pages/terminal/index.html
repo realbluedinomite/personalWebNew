@@ -13,7 +13,7 @@
     <aside class="sidebar">
       <div class="sidebar-content">
         <div class="profile-section">
-          <img src="/images/profile.jpg" alt="Profile Picture" class="profile-pic">
+          <img src="/images/profile.jpg" alt="Profile Picture" class="profile-pic" onerror="this.style.display='none'">
           <h2>Your Name</h2>
           <p>Web Developer</p>
         </div>
@@ -29,7 +29,13 @@
             <li><a href="/terminal/" class="nav-link" data-page="terminal"><i class="fas fa-terminal"></i> Terminal</a></li>
           </ul>
         </nav>
-        <button class="theme-toggle" id="theme-switch"><i class="fas fa-moon"></i> Dark Mode</button>
+        <div class="theme-switch-wrapper">
+                    <label class="theme-switch" for="theme-switch">
+                        <input type="checkbox" id="theme-switch" />
+                        <div class="slider round"></div>
+                    </label>
+                    <span id="theme-text">Dark Mode</span>
+                </div>
       </div>
     </aside>
 
